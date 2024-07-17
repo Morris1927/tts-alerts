@@ -5,9 +5,12 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
 
+import javax.inject.Inject;
+
 @ConfigGroup("ttsalerts")
 public interface TTSAlertsConfig extends Config
 {
+
 
 	@Range( max = 100 )
 	@ConfigItem(
@@ -39,7 +42,7 @@ public interface TTSAlertsConfig extends Config
 			description = "Alerts user on receiving a hitsplat bigger than 0",
 			position = 3
 	)
-	default Boolean bAlertHP()
+	default boolean bAlertHP()
 	{
 		return false;
 	}
@@ -50,7 +53,7 @@ public interface TTSAlertsConfig extends Config
 			description = "Alerts user on superior spawning",
 			position = 4
 	)
-	default Boolean bAlertSuperior()
+	default boolean bAlertSuperior()
 	{
 		return false;
 	}

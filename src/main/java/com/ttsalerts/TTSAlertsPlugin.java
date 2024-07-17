@@ -30,20 +30,19 @@ public class TTSAlertsPlugin extends Plugin
 	private final String COMMAND_HEALTH = "hp";
 	private final String COMMAND_SUPERIOR = "sup";
 
-	private boolean bAlertHealth = false;
-	private boolean bAlertSuperior = false;
-
 	@Subscribe
 	public void onHitsplatApplied(HitsplatApplied hitsplatApplied)
 	{
-		if (!bAlertHealth) return;
+		if (!config.bAlertHP()) return;
 		String name = client.getLocalPlayer().getName();
 		if (!hitsplatApplied.getActor().getName().equalsIgnoreCase(name)) return;
 
 		int damage = hitsplatApplied.getHitsplat().getAmount();
 		if (damage > 0) {
 			int hp = client.getBoostedSkillLevel(Skill.HITPOINTS) - damage;
-			sendTTS(String.valueOf((hp)));
+			if (hp <= config.hpThreshold()) {
+				sendTTS(String.valueOf((hp)));
+			}
 		}
 
 
@@ -52,37 +51,38 @@ public class TTSAlertsPlugin extends Plugin
 
 	@Subscribe
 	public void onChatMessage(ChatMessage chatMessage) {
-		if(!bAlertSuperior) return;
+		if(!config.bAlertSuperior()) return;
 
 		String msg = chatMessage.getMessage();
 		if(msg.contains("A superior foe has appeared")) sendTTS("Superior spawned");
 	}
 
-	@Subscribe
-	public void onCommandExecuted(CommandExecuted commandExecuted) {
-		String command = commandExecuted.getCommand();
-		String args[] = commandExecuted.getArguments();
+//	@Subscribe
+//	public void onCommandExecuted(CommandExecuted commandExecuted) {
+//		String command = commandExecuted.getCommand();
+//		String args[] = commandExecuted.getArguments();
+//
+//		if (command.equalsIgnoreCase(COMMAND_STRING)) {
+//			switch (args[0]) {
+//				case COMMAND_HEALTH:
+//					bAlertHealth = !bAlertHealth;
+//					client.addChatMessage(ChatMessageType.CONSOLE, "", "Alert health: " + String.valueOf(bAlertHealth), "");
+//					break;
+//
+//				case COMMAND_SUPERIOR:
+//					bAlertSuperior = !bAlertSuperior;
+//					client.addChatMessage(ChatMessageType.CONSOLE, "", "Alert superior: " + String.valueOf(bAlertSuperior), "");
+//					break;
+//			}
+//		}
+//	}
 
-		if (command.equalsIgnoreCase(COMMAND_STRING)) {
-			switch (args[0]) {
-				case COMMAND_HEALTH:
-					bAlertHealth = !bAlertHealth;
-					client.addChatMessage(ChatMessageType.CONSOLE, "", "Alert health: " + String.valueOf(bAlertHealth), "");
-					break;
 
-				case COMMAND_SUPERIOR:
-					bAlertSuperior = !bAlertSuperior;
-					client.addChatMessage(ChatMessageType.CONSOLE, "", "Alert superior: " + String.valueOf(bAlertSuperior), "");
-					break;
-			}
-		}
-	}
-
-
-	private static void sendTTS(String message) {
+	private void sendTTS(String message) {
 		//	String[] command = {"powershell.exe", "Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('" + message +"');"};
 		String[] command = {"powershell.exe", "Add-Type -AssemblyName System.Speech; $Synth = New-Object System.Speech.Synthesis.SpeechSynthesizer;" +
 				"$Synth.SelectVoice('Microsoft Zira Desktop');" +
+				"$Synth.Volume = " + String.valueOf(config.ttsVolume()) + ";" +
 				"$Synth.Speak('" + message +"');"};
 		try {
 			ProcessBuilder pb = new ProcessBuilder(command);
