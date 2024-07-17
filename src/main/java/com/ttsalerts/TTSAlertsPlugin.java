@@ -47,7 +47,7 @@ public class TTSAlertsPlugin extends Plugin
 		if(!config.bAlertSuperior()) return;
 
 		String msg = chatMessage.getMessage();
-		if(msg.contains("A superior foe has appeared")) sendTTS("Superior spawned");
+		if(msg.contains("A Magical staff")) sendTTS("Superior spawned");
 	}
 
 	private void sendTTS(String message) {
