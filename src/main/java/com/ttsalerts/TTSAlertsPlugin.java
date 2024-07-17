@@ -51,7 +51,6 @@ public class TTSAlertsPlugin extends Plugin
 	}
 
 	private void sendTTS(String message) {
-		//	String[] command = {"powershell.exe", "Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('" + message +"');"};
 		String[] command = {"powershell.exe", "Add-Type -AssemblyName System.Speech; $Synth = New-Object System.Speech.Synthesis.SpeechSynthesizer;" +
 				"$Synth.SelectVoice('Microsoft Zira Desktop');" +
 				"$Synth.Volume = " + String.valueOf(config.ttsVolume()) + ";" +
