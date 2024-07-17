@@ -1,2 +1,2 @@
-# Example
-An example greeter plugin
+# TTS Alerts
+TTS alerts for HP and superiors spawning
