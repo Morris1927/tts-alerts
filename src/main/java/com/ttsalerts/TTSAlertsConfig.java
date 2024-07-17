@@ -5,8 +5,6 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
 
-import javax.inject.Inject;
-
 @ConfigGroup("ttsalerts")
 public interface TTSAlertsConfig extends Config
 {
