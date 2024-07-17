@@ -3,6 +3,7 @@ package com.ttsalerts;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.Skill;
 import net.runelite.api.events.ChatMessage;
@@ -47,12 +48,12 @@ public class TTSAlertsPlugin extends Plugin
 		if(!config.bAlertSuperior()) return;
 
 		String msg = chatMessage.getMessage();
-		if(msg.contains("A Magical staff")) sendTTS("Superior spawned");
+		if(msg.contains("A superior foe has appeared")) sendTTS("Superior spawned");
 	}
 
 	private void sendTTS(String message) {
 		String[] command = {"powershell.exe", "Add-Type -AssemblyName System.Speech; $Synth = New-Object System.Speech.Synthesis.SpeechSynthesizer;" +
-				"$Synth.SelectVoice('Microsoft Zira Desktop');" +
+				"$Synth.SelectVoice('" + config.ttsVoice() + "');" +
 				"$Synth.Volume = " + String.valueOf(config.ttsVolume()) + ";" +
 				"$Synth.Speak('" + message +"');"};
 		try {
